@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+{% extends "chat/base.html" %}
+{% block content %}
+<div class="container">
+  <br>
+  <div class="jumbotron">
+    <h1>Sign up</h1>
+  <form method="post">
+    <table>
+  {{form.as_table}}
+  {%csrf_token%}
+</table><br>
+  <button type="submit" class="btn btn-primary" value="submit">Sign up</button>
+  </form>
+</div>
+</div>
+{% endblock %}
+   </body>
+ </html>

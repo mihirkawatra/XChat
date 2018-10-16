@@ -1,0 +1,121 @@
+{% extends "chat/base.html" %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<h3>Chat thread for @<span id='user_to'>{% if user != object.first %}{{ object.first }}{% else %}{{ object.second }}{% endif %}</span></h3>
+<div id="msg-list-div" class="panel-body">
+<ul id="msg-list" class="list-group">
+{% for chat in object.chatmessage_set.all %}
+
+{% if user == chat.user_from %}
+<li class="text-right list-group-item">{{ chat.message }}</li>
+{% else %}
+<li class="text-left list-group-item">{{ chat.message }}</li>
+{% endif %}
+{% empty %}
+
+{% endfor %}
+
+</ul>
+</div>
+<style type="text/css">
+input[type=text] {
+    width: 130px;
+    float: left;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: white;
+    background-position: 10px 10px;
+    background-repeat: no-repeat;
+    padding: 12px 20px 12px 40px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+}
+input[type=text]:focus {
+    width: 90%;
+    overflow: hidden;
+}
+input[type=submit]{
+  float: right;
+}
+label{
+  float: left;
+  padding: 10px;
+}
+</style>
+
+<form id='form' method='POST'> {% csrf_token %}
+<input type='hidden' id='myUsername' value='{{ user }}'/>
+<br><br>{{ form.as_table }}<br><br><br>
+<input type='submit' id='send' value='Send' class='btn btn-primary'/><br><br>
+</form>
+{% else %}
+<p class='lead'>You are not logged in!</p>
+{% endif %}
+{% endblock %}
+
+{% block script %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.js"></script>
+
+<script>
+    var chatlist = document.getElementById('msg-list-div');
+    chatlist.scrollTop = chatlist.scrollHeight;
+</script>
+
+<script>
+// websocket scripts
+// console.log(window.location)
+$(document).ready(function() {
+     $('#send').attr('disabled','disabled');
+     $('#id_message').keyup(function() {
+        if($(this).val() != '') {
+            $('#send').removeAttr('disabled');
+        }
+        else {
+            $('#send').attr('disabled','disabled');
+        }
+     });
+ });
+
+var loc =  window.location
+var formData = $("#form")
+var msgInput = $("#id_message")
+var chatHolder = $("#msg-list")
+var me = $("#myUsername")
+var wsStart = 'ws://'
+if(loc.protocol == 'https:'){
+    wsStart = 'wss://'
+}
+var endpoint = wsStart + loc.host + loc.pathname
+var socket = new ReconnectingWebSocket(endpoint)
+socket.onmessage = function(e){
+  console.log("message",e)
+  document.location.reload(true)
+  // var chatDataMsg = JSON.parse(e.data)
+  // chatHolder.append("<li>"+chatDataMsg.message+"via"+chatDataMsg.username+"</li>")
+}
+socket.onopen = function(e){
+  console.log("open",e)
+  formData.submit(function(event){
+      event.preventDefault()
+      var msgText = msgInput.val()
+      // chatHolder.append("<li>"+msgText+" via "+me.val()+"</li>")
+      var finalData = {
+          'message': msgText
+      }
+      socket.send(JSON.stringify(finalData))
+      // var formDataSerialized = formData.serialize()
+      // socket.send(formDataSerialized)
+      formData[0].reset()
+  })
+}
+socket.onerror = function(e){
+  console.log("error",e)
+}
+socket.onclose = function(e){
+  console.log("close",e)
+}
+</script>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "chat/base.html" %}
+
+{% block content %}
+<h3>Your Inbox</h3>
+<ul>
+{% for chat in qs %}
+<li><a href='{% if user != chat.first %}{{ chat.first }}{% else %}{{ chat.second }}{% endif %}/'>@{% if user != chat.first %}{{ chat.first }}{% else %}{{ chat.second }}{% endif %}</a></li>
+{% endfor %}
+</ul>
+{% endblock %}

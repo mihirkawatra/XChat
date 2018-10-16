@@ -1,0 +1,9 @@
+{% extends "chat/base.html" %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<p class='lead'>Welcome Home @{{ user }}</p>
+{% else %}
+<p class='lead'>Welcome Home. You are not logged in!</p>
+{% endif %}
+{% endblock %}
