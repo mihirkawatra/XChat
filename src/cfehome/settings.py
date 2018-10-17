@@ -51,7 +51,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'channels_project.urls'
+ROOT_URLCONF = 'cfehome.urls'
 
 TEMPLATES = [
     {
@@ -69,9 +69,9 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'channels_project.wsgi.application'
+WSGI_APPLICATION = 'cfehome.wsgi.application'
 
-ASGI_APPLICATION = "channels_project.routing.application"
+ASGI_APPLICATION = "cfehome.routing.application"
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
