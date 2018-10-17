@@ -1,10 +1,14 @@
 {% extends "chat/base.html" %}
 
 {% block content %}
+{% if user.is_authenticated %}
 <h3>Your Inbox</h3>
 <ul>
 {% for chat in qs %}
 <li><a href='{% if user != chat.first %}{{ chat.first }}{% else %}{{ chat.second }}{% endif %}/'>@{% if user != chat.first %}{{ chat.first }}{% else %}{{ chat.second }}{% endif %}</a></li>
 {% endfor %}
 </ul>
+{% else %}
+<p class='lead'>Please Sign-in to view the inbox!</p>
+{% endif %}
 {% endblock %}
