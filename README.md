@@ -12,4 +12,4 @@ $ python src/manage.py migrate<br>
 $ python src/manage.py runserver<br>
 
 ## Upcoming Additions:
-<ul><li>Adding End-to-End Encryption</li><li>Improving the front-end</li><li>Adding AJAX-based user search</li></ul>
+<ul><li>Adding End-to-End Encryption (Using Authenticated Key Exchange)</li><li>Improving the front-end</li><li>Adding AJAX-based user search</li></ul>
